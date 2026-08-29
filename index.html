@@ -8,36 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  /* White & Ash Monochromatic Palette */
-  --bg-main: #f8fafc;
-  --bg-ash: #cbd5e1;
-  --bg-dark-ash: #94a3b8;
-  --accent-color: #475569;
-  --accent-hover: #0f172a;
-  --text-main: #0f172a;
-  --text-muted: #475569;
 
-
-  /* Liquid Glass (Preserved Untouched) */
-  --glass-surface: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.45);
-  --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
-  --glass-hover-bg: rgba(255, 255, 255, 0.22);
-
-
-  /* Victorian Style Elements */
-  --victorian-border: 1px solid rgba(15, 23, 42, 0.2);
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-}
-
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-<!-- Firebase SDKs & Database Configuration -->
+<!-- Firebase Web Modular Libraries -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -58,19 +30,45 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Expose database helpers globally to the rest of your app
+  // Attach helpers to global window object
   window.db = db;
   window.doc = doc;
   window.getDoc = getDoc;
   window.setDoc = setDoc;
 </script>
+
+<style>
+:root {
+  /* White & Ash Monochromatic Palette */
+  --bg-main: #f8fafc;
+  --bg-ash: #cbd5e1;
+  --bg-dark-ash: #94a3b8;
+  --accent-color: #475569;
+  --accent-hover: #0f172a;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+
+  /* Liquid Glass */
+  --glass-surface: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+  --glass-hover-bg: rgba(255, 255, 255, 0.22);
+
+  /* Victorian Style Elements */
+  --victorian-border: 1px solid rgba(15, 23, 42, 0.2);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 html { 
   scroll-behavior: smooth; 
   font-family: 'Plus Jakarta Sans', sans-serif; 
   background-color: var(--bg-main); 
   color: var(--text-main); 
 }
-
 
 body {
   min-height: 100vh;
@@ -81,14 +79,12 @@ body {
   cursor: default;
 }
 
-
 /* Victorian Typography Overrides */
 h1, h2, h3, .section-title, .hero-title {
   font-family: 'Playfair Display', serif !important;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-
 
 /* 2px Scroll Progress Bar */
 #scroll-progress {
@@ -101,7 +97,6 @@ h1, h2, h3, .section-title, .hero-title {
   z-index: 9999;
   transition: width 0.1s linear;
 }
-
 
 /* Custom Cursor */
 .custom-cursor {
@@ -118,7 +113,6 @@ h1, h2, h3, .section-title, .hero-title {
   backdrop-filter: blur(2px);
 }
 
-
 .custom-cursor-dot {
   width: 4px;
   height: 4px;
@@ -130,11 +124,9 @@ h1, h2, h3, .section-title, .hero-title {
   transform: translate(-50%, -50%);
 }
 
-
 @media (pointer: coarse) {
   .custom-cursor, .custom-cursor-dot { display: none !important; }
 }
-
 
 /* Liquid Glass Styling with Victorian Accent Inner Line */
 .glass-panel {
@@ -150,7 +142,6 @@ h1, h2, h3, .section-title, .hero-title {
   outline-offset: -6px;
 }
 
-
 .container { 
   max-width: 1200px; 
   margin: 0 auto; 
@@ -160,7 +151,6 @@ h1, h2, h3, .section-title, .hero-title {
   width: 100%; 
 }
 
-
 section { 
   padding: 8rem 0; 
   position: relative; 
@@ -169,14 +159,12 @@ section {
   border-bottom: var(--victorian-border);
 }
 
-
 .section-title {
   font-size: 2.25rem;
   font-weight: 800;
   margin-bottom: 0.5rem;
   color: var(--text-main);
 }
-
 
 .section-subtitle { 
   font-size: 1rem; 
@@ -185,7 +173,6 @@ section {
   font-style: italic;
   font-family: 'Playfair Display', serif;
 }
-
 
 .section-bg-canvas {
   position: absolute;
@@ -196,7 +183,6 @@ section {
   z-index: 1;
   pointer-events: none;
 }
-
 
 /* Navigation & Toggle Buttons */
 .menu-toggle-btn {
@@ -221,12 +207,10 @@ section {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
 .menu-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.6);
   transform: scale(1.05);
 }
-
 
 .floating-admin-btn {
   position: fixed;
@@ -251,12 +235,10 @@ section {
   letter-spacing: 0.05em;
 }
 
-
 .floating-admin-btn:hover {
   background: var(--text-main);
   transform: translateY(-2px);
 }
-
 
 /* Sidebar Navigation */
 .right-sidebar {
@@ -280,9 +262,7 @@ section {
   overflow-y: auto;
 }
 
-
 .right-sidebar.open { right: 0; }
-
 
 .sidebar-overlay {
   position: fixed;
@@ -298,12 +278,9 @@ section {
   transition: opacity 0.3s ease;
 }
 
-
 .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
-
 .nav-links { display: flex; flex-direction: column; gap: 0.8rem; list-style: none; }
-
 
 .nav-links li {
   opacity: 0;
@@ -311,12 +288,10 @@ section {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-
 .right-sidebar.open .nav-links li {
   opacity: 1;
   transform: translateX(0);
 }
-
 
 .nav-links a {
   text-decoration: none;
@@ -333,12 +308,10 @@ section {
   gap: 0.85rem;
 }
 
-
 .nav-links a:hover {
   background: rgba(255, 255, 255, 0.6);
   transform: translateX(-4px);
 }
-
 
 .admin-btn {
   background: var(--text-main);
@@ -357,12 +330,10 @@ section {
   gap: 0.6rem;
 }
 
-
 .admin-btn:hover {
   background: var(--accent-hover);
   transform: translateY(-2px);
 }
-
 
 /* Glass Buttons */
 .btn {
@@ -381,14 +352,12 @@ section {
   letter-spacing: 0.03em;
 }
 
-
 .btn-primary { background: var(--text-main); color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
 .btn-secondary { background: rgba(255, 255, 255, 0.2); color: var(--text-main); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
 .btn-secondary:hover { background: rgba(255, 255, 255, 0.45); transform: translateY(-2px); }
 .btn-danger { background: #ef4444; color: #fff; }
 .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px; }
-
 
 /* Global Smoke Reveal Canvas System Across All Pages */
 #global-reveal-container {
@@ -401,7 +370,6 @@ section {
   pointer-events: none;
 }
 
-
 .hero-img-back {
   position: absolute;
   top: 0;
@@ -411,7 +379,6 @@ section {
   object-fit: cover;
   z-index: 1;
 }
-
 
 #smoke-canvas {
   position: absolute;
@@ -425,7 +392,6 @@ section {
   touch-action: none;
 }
 
-
 .hero-overlay-shade {
   position: absolute;
   top: 0;
@@ -437,13 +403,11 @@ section {
   pointer-events: none;
 }
 
-
 /* Foreground Content Wrapper */
 .content-wrapper {
   position: relative;
   z-index: 5;
 }
-
 
 /* Hero Content */
 .hero { 
@@ -456,17 +420,14 @@ section {
   padding: 3rem; 
 }
 
-
 .hero-content { position: relative; z-index: 10; max-width: 540px; width: 100%; }
 .hero-card { padding: 2.5rem; }
 .hero-title { font-size: 2.75rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; color: var(--text-main); }
 .hero-role { font-size: 1.1rem; color: var(--accent-color); font-weight: 600; margin-bottom: 1rem; font-style: italic; font-family: 'Playfair Display', serif; }
 .hero-intro { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.75rem; }
 
-
 /* Grid Layouts & Ultra-Transparent Glass Cards */
 .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-
 
 .card-item {
   padding: 2.25rem;
@@ -475,15 +436,12 @@ section {
   justify-content: space-between;
 }
 
-
 .card-item:hover {
   background: var(--glass-hover-bg);
   border-color: rgba(255, 255, 255, 0.6);
 }
 
-
 .pill-wrap { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
-
 
 .skill-pill {
   background: rgba(255, 255, 255, 0.2);
@@ -497,16 +455,13 @@ section {
   transition: all 0.2s ease;
 }
 
-
 .skill-pill:hover {
   background: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
 }
 
-
 /* Social Glass Icons */
 .social-links { display: flex; gap: 1rem; margin-top: 1.5rem; }
-
 
 .social-icon {
   display: inline-flex;
@@ -524,9 +479,7 @@ section {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
 .social-icon:hover { background: var(--text-main); color: #fff; transform: translateY(-3px); }
-
 
 /* Scroll Reveal Animations */
 .reveal-on-scroll {
@@ -536,13 +489,11 @@ section {
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
 .reveal-on-scroll.visible {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
 }
-
 
 /* Admin Modal */
 .modal-overlay { 
@@ -562,9 +513,7 @@ section {
   transition: opacity 0.3s ease; 
 }
 
-
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
-
 
 .modal-card { 
   width: 90%; 
@@ -580,7 +529,6 @@ section {
   box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
 }
 
-
 .modal-header { 
   display: flex; 
   justify-content: space-between; 
@@ -590,10 +538,8 @@ section {
   padding-bottom: 1rem; 
 }
 
-
 .form-group { margin-bottom: 1.2rem; }
 .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
-
 
 .form-control { 
   width: 100%; 
@@ -608,9 +554,7 @@ section {
   backdrop-filter: blur(10px); 
 }
 
-
 .form-control:focus { outline: none; border-color: var(--text-main); background: rgba(255, 255, 255, 0.8); }
-
 
 .admin-tab-nav { 
   display: flex; 
@@ -620,7 +564,6 @@ section {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
   padding-bottom: 0.5rem; 
 }
-
 
 .admin-tab-btn { 
   padding: 0.5rem 1rem; 
@@ -635,11 +578,9 @@ section {
   font-family: 'Playfair Display', serif;
 }
 
-
 .admin-tab-btn.active { background: var(--text-main); color: #fff; }
 .admin-tab-content { display: none; }
 .admin-tab-content.active { display: block; }
-
 
 .crud-box { 
   background: rgba(255, 255, 255, 0.3); 
@@ -648,7 +589,6 @@ section {
   padding: 1.25rem; 
   margin-bottom: 1.5rem; 
 }
-
 
 .crud-item { 
   display: flex; 
@@ -661,9 +601,7 @@ section {
   margin-bottom: 0.5rem; 
 }
 
-
 .empty-state { padding: 2rem; text-align: center; color: var(--text-muted); font-style: italic; }
-
 
 @media (max-width: 768px) {
   .hero { padding: 1.5rem; }
@@ -674,30 +612,24 @@ section {
 </head>
 <body>
 
-
 <!-- 2px Scroll Progress Bar -->
 <div id="scroll-progress"></div>
-
 
 <!-- Minimal Custom Cursor -->
 <div class="custom-cursor" id="cursor-ring"></div>
 <div class="custom-cursor-dot" id="cursor-dot"></div>
-
 
 <!-- Menu Toggle Button -->
 <button class="menu-toggle-btn" id="menu-toggle-btn" onclick="toggleSidebar()" aria-label="Toggle Navigation">
   <i class="fa-solid fa-bars" id="menu-icon"></i>
 </button>
 
-
 <!-- Permanent Bottom-Right Admin Button -->
 <button class="floating-admin-btn" onclick="openLoginModal()">
   <i class="fa-solid fa-lock"></i> Admin Panel
 </button>
 
-
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-
 
 <!-- Slide-Out Sidebar Navigation -->
 <aside class="right-sidebar" id="right-sidebar">
@@ -714,14 +646,12 @@ section {
   </ul>
 </aside>
 
-
 <!-- GLOBAL FULL-PAGE REVEAL CANVAS SYSTEM -->
 <div id="global-reveal-container">
   <img src="" id="display-img-back" class="hero-img-back" alt="Base Layer Image">
   <canvas id="smoke-canvas"></canvas>
   <div class="hero-overlay-shade"></div>
 </div>
-
 
 <!-- FOREGROUND WEBSITE CONTENT -->
 <div class="content-wrapper">
@@ -742,7 +672,6 @@ section {
       </div>
     </section>
 
-
     <!-- ABOUT SECTION -->
     <section id="about">
       <canvas id="canvas-about" class="section-bg-canvas"></canvas>
@@ -753,7 +682,6 @@ section {
         </div>
       </div>
     </section>
-
 
     <!-- SKILLS SECTION -->
     <section id="skills">
@@ -767,7 +695,6 @@ section {
       </div>
     </section>
 
-
     <!-- PROJECTS SECTION -->
     <section id="projects">
       <canvas id="canvas-projects" class="section-bg-canvas"></canvas>
@@ -779,7 +706,6 @@ section {
         <div class="grid-container" id="projects-container"></div>
       </div>
     </section>
-
 
     <!-- CONTACT SECTION -->
     <section id="contact">
@@ -795,9 +721,7 @@ section {
       </div>
     </section>
 
-
   </main>
-
 
   <!-- FOOTER SECTION -->
   <footer style="position: relative; padding: 4rem 0 3rem 0; overflow: hidden; background: transparent;">
@@ -808,7 +732,6 @@ section {
   </footer>
 </div>
 
-
 <!-- LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal-card" style="max-width: 400px;">
@@ -818,13 +741,12 @@ section {
     </div>
     <div class="form-group">
       <label>Password</label>
-      <input type="password" id="admin-pass-input" class="form-control" placeholder="Default: admin">
+      <input type="password" id="admin-pass-input" class="form-control" placeholder="Enter Admin Password">
     </div>
     <p id="login-error" style="color:#ef4444; font-size:0.85rem; display:none; margin-bottom: 1rem;">Invalid password.</p>
     <button class="btn btn-primary" onclick="verifyAdminPassword()" style="width:100%; justify-content:center;">Log In</button>
   </div>
 </div>
-
 
 <!-- ADMIN CONTROL PANEL MODAL -->
 <div class="modal-overlay" id="admin-modal">
@@ -834,7 +756,6 @@ section {
       <span style="cursor:pointer;" onclick="closeModal('admin-modal')"><i class="fa-solid fa-xmark"></i></span>
     </div>
 
-
     <div class="admin-tab-nav">
       <button class="admin-tab-btn active" onclick="switchTab(event, 'tab-hero')">Hero & Fullscreen Photos</button>
       <button class="admin-tab-btn" onclick="switchTab(event, 'tab-about')">About</button>
@@ -843,7 +764,6 @@ section {
       <button class="admin-tab-btn" onclick="switchTab(event, 'tab-contact')">Contact & Links</button>
       <button class="admin-tab-btn" onclick="switchTab(event, 'tab-security')">Security</button>
     </div>
-
 
     <div class="admin-tab-content active" id="tab-hero">
       <div class="form-group"><label>Name</label><input type="text" id="adm-hero-name" class="form-control"></div>
@@ -859,11 +779,9 @@ section {
       </div>
     </div>
 
-
     <div class="admin-tab-content" id="tab-about">
       <div class="form-group"><label>Biography Paragraphs</label><textarea id="adm-about-text" class="form-control" rows="5"></textarea></div>
     </div>
-
 
     <div class="admin-tab-content" id="tab-skills">
       <div class="crud-box">
@@ -893,7 +811,6 @@ section {
       <div id="adm-skills-list" style="margin-top: 0.8rem;"></div>
     </div>
 
-
     <div class="admin-tab-content" id="tab-projects">
       <div class="crud-box">
         <h4 id="project-form-title">Add / Edit Project</h4>
@@ -911,7 +828,6 @@ section {
       <div id="adm-projects-list" style="margin-top: 0.8rem;"></div>
     </div>
 
-
     <div class="admin-tab-content" id="tab-contact">
       <div class="form-group"><label>Email Address</label><input type="text" id="adm-contact-email" class="form-control"></div>
       <div class="form-group"><label>GitHub Account Link</label><input type="text" id="adm-social-github" class="form-control" placeholder="https://github.com/yourusername"></div>
@@ -919,11 +835,9 @@ section {
       <div class="form-group"><label>Facebook ID Link</label><input type="text" id="adm-social-facebook" class="form-control" placeholder="https://facebook.com/yourusername"></div>
     </div>
 
-
     <div class="admin-tab-content" id="tab-security">
       <div class="form-group"><label>New Password</label><input type="password" id="adm-new-pass" class="form-control" placeholder="Leave empty to keep existing password"></div>
     </div>
-
 
     <div style="margin-top: 2rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem; display: flex; justify-content: space-between;">
       <button class="btn btn-danger btn-sm" onclick="clearAllData()">Reset All Data</button>
@@ -932,10 +846,8 @@ section {
   </div>
 </div>
 
-
 <script>
 document.getElementById('footer-year').innerText = new Date().getFullYear();
-
 
 function toggleSidebar() {
   const sidebar = document.getElementById('right-sidebar');
@@ -952,7 +864,6 @@ function toggleSidebar() {
   }
 }
 
-
 function openLoginModal() {
   if (document.getElementById('right-sidebar').classList.contains('open')) {
     toggleSidebar();
@@ -960,6 +871,9 @@ function openLoginModal() {
   document.getElementById('login-modal').classList.add('open');
 }
 
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
 
 function scrollToSection(id) {
   const section = document.getElementById(id);
@@ -971,9 +885,7 @@ function scrollToSection(id) {
   }
 }
 
-
 const emptyState = {
-  adminPassword: "admin",
   hero: { name: "", role: "", intro: "", imgFront: "", imgBack: "" },
   about: { text: "" },
   skills: [],
@@ -981,28 +893,63 @@ const emptyState = {
   contact: { email: "", github: "", linkedin: "", facebook: "" }
 };
 
-
 let portfolioData = structuredClone(emptyState);
 let tempSkillItems = [];
 let tempProjectImage = "";
-const STORAGE_KEY = 'portfolioData_pro_v1';
 
-
+// 1. Load Data directly from Firebase cloud
 async function loadPortfolioData() {
   try {
-    if (window.storage && typeof window.storage.get === 'function') {
-      const result = await window.storage.get(STORAGE_KEY, true);
-      if (result && result.value) portfolioData = JSON.parse(result.value);
-    } else {
-      const local = localStorage.getItem(STORAGE_KEY);
-      if (local) portfolioData = JSON.parse(local);
+    const docRef = window.doc(window.db, "portfolio", "data");
+    const docSnap = await window.getDoc(docRef);
+
+    if (docSnap.exists()) {
+      portfolioData = docSnap.data();
     }
   } catch (err) {
-    console.log('Using default data configuration:', err);
+    console.log("Using default fallback layout:", err);
   }
   renderWebsite();
 }
 
+// 2. Temporarily hold entered password in memory
+function verifyAdminPassword() {
+  const input = document.getElementById('admin-pass-input').value;
+  
+  // Stored only in user's temporary browser memory
+  window.currentEnteredPass = input;
+  
+  closeModal('login-modal');
+  document.getElementById('admin-modal').classList.add('open');
+  populateAdminFields();
+}
+
+// 3. Save updates live to Cloud Database
+async function saveAllChanges() {
+  portfolioData.hero.name = document.getElementById('adm-hero-name').value;
+  portfolioData.hero.role = document.getElementById('adm-hero-role').value;
+  portfolioData.hero.intro = document.getElementById('adm-hero-intro').value;
+  portfolioData.about.text = document.getElementById('adm-about-text').value;
+  portfolioData.contact.email = document.getElementById('adm-contact-email').value;
+  portfolioData.contact.github = document.getElementById('adm-social-github').value;
+  portfolioData.contact.linkedin = document.getElementById('adm-social-linkedin').value;
+  portfolioData.contact.facebook = document.getElementById('adm-social-facebook').value;
+
+  // Pass entered password to Firebase security rules for validation
+  portfolioData.adminPassword = window.currentEnteredPass || "";
+
+  try {
+    const docRef = window.doc(window.db, "portfolio", "data");
+    await window.setDoc(docRef, portfolioData);
+
+    renderWebsite();
+    closeModal('admin-modal');
+    alert("Portfolio updated live across all devices!");
+  } catch (err) {
+    console.error("Save failed:", err);
+    alert("Incorrect password or access denied by database rules.");
+  }
+}
 
 function renderWebsite() {
   document.getElementById('display-hero-name').innerText = portfolioData.hero.name || "Your Name";
@@ -1010,18 +957,14 @@ function renderWebsite() {
   document.getElementById('display-hero-intro').innerText = portfolioData.hero.intro || "Configure your introduction text inside the Admin Dashboard.";
   
   const backImgEl = document.getElementById('display-img-back');
-  if (portfolioData.hero.imgBack) {
+  if (portfolioData.hero && portfolioData.hero.imgBack) {
     backImgEl.src = portfolioData.hero.imgBack;
     backImgEl.style.display = 'block';
   } else {
     backImgEl.style.display = 'none';
   }
-  
-  initSmokeCanvas();
 
-
-  document.getElementById('display-about-text').innerText = portfolioData.about.text || "No biography details added yet.";
-
+  document.getElementById('display-about-text').innerText = (portfolioData.about && portfolioData.about.text) || "No biography details added yet.";
 
   const skillsContainer = document.getElementById('skills-container');
   skillsContainer.innerHTML = '';
@@ -1040,7 +983,6 @@ function renderWebsite() {
     });
   }
 
-
   const projContainer = document.getElementById('projects-container');
   projContainer.innerHTML = '';
   if (!portfolioData.projects || portfolioData.projects.length === 0) {
@@ -1052,662 +994,25 @@ function renderWebsite() {
       card.style.transitionDelay = `${i * 0.1}s`;
       card.innerHTML = `
         <div>
-          ${p.image ? `<div style="overflow:hidden; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.4);"><img src="${p.image}" style="width:100%; height: 190px; object-fit:cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"></div>` : ''}
-          <h3 style="font-size:1.35rem;">${p.title}</h3>
-          <p style="color:var(--text-muted); font-size:0.95rem; margin-top:0.6rem; line-height:1.6;">${p.desc}</p>
+          ${p.image ? `<div style="overflow:hidden; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.4);"><img src="${p.image}" style="width:100%; height: 190px; object-fit:cover;"></div>` : ''}
+          <h3>${p.title}</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem; line-height:1.5;">${p.description}</p>
         </div>
-        ${p.link ? `<div style="margin-top: 1.5rem;"><a href="${p.link}" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-brands fa-github"></i> Code Repository</a></div>` : ''}
+        ${p.link ? `<div style="margin-top:1.2rem;"><a href="${p.link}" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-brands fa-github"></i> View Code</a></div>` : ''}
       `;
       projContainer.appendChild(card);
     });
   }
 
-
-  document.getElementById('display-contact-email').innerText = portfolioData.contact.email || "Not configured";
-  const socialContainer = document.getElementById('display-social-links');
-  socialContainer.innerHTML = '';
-  if (portfolioData.contact.github) {
-    socialContainer.innerHTML += `<a href="${portfolioData.contact.github}" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>`;
-  }
-  if (portfolioData.contact.linkedin) {
-    socialContainer.innerHTML += `<a href="${portfolioData.contact.linkedin}" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>`;
-  }
-  if (portfolioData.contact.facebook) {
-    socialContainer.innerHTML += `<a href="${portfolioData.contact.facebook}" target="_blank" class="social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>`;
-  }
-
-
-  initObserver();
-  initTiltEffect();
-}
-
-
-/* FULL-PAGE SMOKE REVEAL CANVAS CONTROLLER */
-let smokeParticles = [];
-let animationFrameId = null;
-
-
-function initSmokeCanvas() {
-  const canvas = document.getElementById('smoke-canvas');
-  if (!canvas) return;
-
-
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
-  if (!portfolioData.hero.imgFront) return;
-
-
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = portfolioData.hero.imgFront;
-
-
-  img.onload = () => {
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  };
-
-
-  function addSmoke(x, y) {
-    for (let i = 0; i < 5; i++) {
-      smokeParticles.push({
-        x: x + (Math.random() - 0.5) * 30,
-        y: y + (Math.random() - 0.5) * 30,
-        size: Math.random() * 45 + 30,
-        opacity: 1,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2
-      });
-    }
-  }
-
-
-  function animateSmoke() {
-    if (!portfolioData.hero.imgFront) return;
-
-
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    ctx.globalCompositeOperation = 'destination-out';
-
-
-    for (let i = smokeParticles.length - 1; i >= 0; i--) {
-      let p = smokeParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.size += 0.5;
-      p.opacity -= 0.015;
-
-
-      if (p.opacity <= 0) {
-        smokeParticles.splice(i, 1);
-        continue;
-      }
-
-
-      let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-      gradient.addColorStop(0, `rgba(0, 0, 0, ${p.opacity})`);
-      gradient.addColorStop(0.6, `rgba(0, 0, 0, ${p.opacity * 0.5})`);
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    animationFrameId = requestAnimationFrame(animateSmoke);
-  }
-
-
-  function handleMove(e) {
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    addSmoke(clientX, clientY);
-  }
-
-
-  window.onmousemove = handleMove;
-  window.ontouchmove = handleMove;
-
-
-  if (animationFrameId) cancelAnimationFrame(animationFrameId);
-  animateSmoke();
-}
-
-
-/* 3D ATMOSPHERIC SECTION BACKGROUNDS */
-function initSectionEnvironments() {
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) return;
-
-
-  (function initAboutBG() {
-    const canvas = document.getElementById('canvas-about');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let angle = 0;
-
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const cx = canvas.width * 0.8;
-      const cy = canvas.height * 0.5;
-      angle += 0.003;
-
-
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(angle);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, 180, 60, angle * 0.5, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.restore();
-
-
-      let grad = ctx.createRadialGradient(cx - 30, cy - 30, 10, cx, cy, 140);
-      grad.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-      grad.addColorStop(0.7, 'rgba(203, 213, 225, 0.15)');
-      grad.addColorStop(1, 'rgba(148, 163, 184, 0.02)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 140, 0, Math.PI * 2);
-      ctx.fill();
-
-
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-
-  (function initSkillsBG() {
-    const canvas = document.getElementById('canvas-skills');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let nodes = [];
-
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-      nodes = [];
-      const count = Math.floor((canvas.width * canvas.height) / 25000);
-      for (let i = 0; i < count; i++) {
-        nodes.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
-          r: Math.random() * 2 + 1
-        });
-      }
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.2)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-
-
-      nodes.forEach((n, i) => {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
-        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-
-
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
-
-
-        for (let j = i + 1; j < nodes.length; j++) {
-          let n2 = nodes[j];
-          let dist = Math.hypot(n.x - n2.x, n.y - n2.y);
-          if (dist < 130) {
-            ctx.beginPath();
-            ctx.moveTo(n.x, n.y);
-            ctx.lineTo(n2.x, n2.y);
-            ctx.lineWidth = (1 - dist / 130) * 0.8;
-            ctx.stroke();
-          }
-        }
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-
-  (function initProjectsBG() {
-    const canvas = document.getElementById('canvas-projects');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let offset = 0;
-
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1;
-      offset += 0.2;
-      const gridSize = 60;
-
-
-      for (let x = 0; x < canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-      for (let y = (offset % gridSize); y < canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-
-  (function initContactBG() {
-    const canvas = document.getElementById('canvas-contact');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let t = 0;
-
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t += 0.01;
-      const cx = canvas.width * 0.2 + Math.sin(t) * 20;
-      const cy = canvas.height * 0.5 + Math.cos(t) * 20;
-
-
-      let grad = ctx.createRadialGradient(cx, cy, 20, cx, cy, 220);
-      grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 220, 0, Math.PI * 2);
-      ctx.fill();
-
-
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-
-  (function initFooterBG() {
-    const canvas = document.getElementById('canvas-footer');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let rot = 0;
-
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      rot += 0.005;
-
-
-      ctx.save();
-      ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
-      ctx.rotate(rot);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-      ctx.strokeRect(-50, -50, 100, 100);
-      ctx.restore();
-
-
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-}
-
-
-/* INTERACTION EFFICIENCY & OBSERVERS */
-function initTiltEffect() {
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) return;
-
-
-  const cards = document.querySelectorAll('.glass-panel');
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-      const rotX = ((y - cy) / cy) * -4;
-      const rotY = ((x - cx) / cx) * 4;
-
-
-      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-2px)`;
-    });
-
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-    });
-  });
-}
-
-
-function initCustomCursor() {
-  const ring = document.getElementById('cursor-ring');
-  const dot = document.getElementById('cursor-dot');
-  if (!ring || !dot) return;
-
-
-  window.addEventListener('mousemove', (e) => {
-    dot.style.left = `${e.clientX}px`;
-    dot.style.top = `${e.clientY}px`;
-    ring.animate({
-      left: `${e.clientX}px`,
-      top: `${e.clientY}px`
-    }, { duration: 250, fill: "forwards" });
-  });
-}
-
-
-function initScrollProgress() {
-  const progress = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => {
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    const current = window.scrollY;
-    if (total > 0) {
-      progress.style.width = `${(current / total) * 100}%`;
-    }
-  });
-}
-
-
-function initObserver() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-
-
-  document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-}
-
-
-/* ADMIN PANEL CONTROLS & CRUD */
-function addSkillItemToTempList() {
-  const input = document.getElementById('skill-item-input');
-  const val = input.value.trim();
-  if (val) {
-    tempSkillItems.push(val);
-    input.value = '';
-    renderTempSkillItems();
+  document.getElementById('display-contact-email').innerText = (portfolioData.contact && portfolioData.contact.email) || "Not configured";
+  const linksContainer = document.getElementById('display-social-links');
+  linksContainer.innerHTML = '';
+  if (portfolioData.contact) {
+    if (portfolioData.contact.github) linksContainer.innerHTML += `<a href="${portfolioData.contact.github}" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>`;
+    if (portfolioData.contact.linkedin) linksContainer.innerHTML += `<a href="${portfolioData.contact.linkedin}" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>`;
+    if (portfolioData.contact.facebook) linksContainer.innerHTML += `<a href="${portfolioData.contact.facebook}" target="_blank" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>`;
   }
 }
-
-
-function removeTempSkillItem(idx) {
-  tempSkillItems.splice(idx, 1);
-  renderTempSkillItems();
-}
-
-
-function renderTempSkillItems() {
-  const container = document.getElementById('temp-skill-items-container');
-  container.innerHTML = '';
-  tempSkillItems.forEach((item, idx) => {
-    container.innerHTML += `<span class="skill-pill">${item} <i class="fa-solid fa-xmark" style="cursor:pointer; margin-left:4px;" onclick="removeTempSkillItem(${idx})"></i></span>`;
-  });
-}
-
-
-function saveSkillCategory() {
-  const catName = document.getElementById('skill-cat-input').value.trim();
-  const editIndex = parseInt(document.getElementById('edit-skill-cat-index').value);
-
-
-  if (!catName) { alert('Category name is required.'); return; }
-
-
-  const categoryData = { category: catName, items: [...tempSkillItems] };
-
-
-  if (editIndex === -1) {
-    portfolioData.skills.push(categoryData);
-  } else {
-    portfolioData.skills[editIndex] = categoryData;
-  }
-
-
-  resetSkillCategoryForm();
-  renderAdminSkillsList();
-}
-
-
-function editSkillCategory(idx) {
-  const cat = portfolioData.skills[idx];
-  document.getElementById('skill-cat-input').value = cat.category;
-  document.getElementById('edit-skill-cat-index').value = idx;
-  tempSkillItems = [...cat.items];
-  renderTempSkillItems();
-  document.getElementById('skill-form-title').innerText = "Edit Skill Category";
-  document.getElementById('cancel-skill-edit-btn').style.display = "inline-block";
-}
-
-
-function deleteSkillCategory(idx) {
-  portfolioData.skills.splice(idx, 1);
-  renderAdminSkillsList();
-}
-
-
-function resetSkillCategoryForm() {
-  document.getElementById('skill-cat-input').value = '';
-  document.getElementById('edit-skill-cat-index').value = -1;
-  tempSkillItems = [];
-  renderTempSkillItems();
-  document.getElementById('skill-form-title').innerText = "Add New Skill Category";
-  document.getElementById('cancel-skill-edit-btn').style.display = "none";
-}
-
-
-function renderAdminSkillsList() {
-  const list = document.getElementById('adm-skills-list');
-  list.innerHTML = '';
-  if (portfolioData.skills.length === 0) {
-    list.innerHTML = '<div class="empty-state">No categories created.</div>';
-    return;
-  }
-  portfolioData.skills.forEach((s, idx) => {
-    list.innerHTML += `
-      <div class="crud-item">
-        <div>
-          <strong>${s.category}</strong>
-          <div style="font-size:0.8rem; color:var(--text-muted);">${s.items.join(', ') || 'No skills'}</div>
-        </div>
-        <div>
-          <button class="btn btn-secondary btn-sm" onclick="editSkillCategory(${idx})">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteSkillCategory(${idx})">Delete</button>
-        </div>
-      </div>
-    `;
-  });
-}
-
-
-function uploadProjectImage(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (evt) => { tempProjectImage = evt.target.result; };
-    reader.readAsDataURL(file);
-  }
-}
-
-
-function saveProject() {
-  const title = document.getElementById('proj-title-input').value.trim();
-  const desc = document.getElementById('proj-desc-input').value.trim();
-  const link = document.getElementById('proj-link-input').value.trim();
-  const editIndex = parseInt(document.getElementById('edit-proj-index').value);
-
-
-  if (!title) { alert('Project title required.'); return; }
-
-
-  const projData = {
-    title: title,
-    desc: desc,
-    link: link,
-    image: tempProjectImage || (editIndex !== -1 ? portfolioData.projects[editIndex].image : "")
-  };
-
-
-  if (editIndex === -1) {
-    portfolioData.projects.push(projData);
-  } else {
-    portfolioData.projects[editIndex] = projData;
-  }
-
-
-  resetProjectForm();
-  renderAdminProjectsList();
-}
-
-
-function editProject(idx) {
-  const p = portfolioData.projects[idx];
-  document.getElementById('proj-title-input').value = p.title;
-  document.getElementById('proj-desc-input').value = p.desc;
-  document.getElementById('proj-link-input').value = p.link || "";
-  document.getElementById('edit-proj-index').value = idx;
-  tempProjectImage = p.image;
-  document.getElementById('project-form-title').innerText = "Edit Project";
-  document.getElementById('cancel-proj-edit-btn').style.display = "inline-block";
-}
-
-
-function deleteProject(idx) {
-  portfolioData.projects.splice(idx, 1);
-  renderAdminProjectsList();
-}
-
-
-function resetProjectForm() {
-  document.getElementById('proj-title-input').value = '';
-  document.getElementById('proj-desc-input').value = '';
-  document.getElementById('proj-link-input').value = '';
-  document.getElementById('proj-file-input').value = '';
-  document.getElementById('edit-proj-index').value = -1;
-  tempProjectImage = "";
-  document.getElementById('project-form-title').innerText = "Add / Edit Project";
-  document.getElementById('cancel-proj-edit-btn').style.display = "none";
-}
-
-
-function renderAdminProjectsList() {
-  const list = document.getElementById('adm-projects-list');
-  list.innerHTML = '';
-  if (portfolioData.projects.length === 0) {
-    list.innerHTML = '<div class="empty-state">No projects created.</div>';
-    return;
-  }
-  portfolioData.projects.forEach((p, idx) => {
-    list.innerHTML += `
-      <div class="crud-item">
-        <div><strong>${p.title}</strong></div>
-        <div>
-          <button class="btn btn-secondary btn-sm" onclick="editProject(${idx})">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteProject(${idx})">Delete</button>
-        </div>
-      </div>
-    `;
-  });
-}
-
-
-function uploadHeroImage(e, targetKey) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (evt) => { portfolioData.hero[targetKey] = evt.target.result; };
-    reader.readAsDataURL(file);
-  }
-}
-
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-
-function verifyAdminPassword() {
-  const input = document.getElementById('admin-pass-input').value;
-  if (input === portfolioData.adminPassword) {
-    closeModal('login-modal');
-    document.getElementById('admin-modal').classList.add('open');
-    populateAdminFields();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
-  }
-}
-
-
-function switchTab(e, tabId) {
-  document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
-  e.currentTarget.classList.add('active');
-  document.getElementById(tabId).classList.add('active');
-}
-
 
 function populateAdminFields() {
   document.getElementById('adm-hero-name').value = portfolioData.hero.name || "";
@@ -1718,69 +1023,21 @@ function populateAdminFields() {
   document.getElementById('adm-social-github').value = portfolioData.contact.github || "";
   document.getElementById('adm-social-linkedin').value = portfolioData.contact.linkedin || "";
   document.getElementById('adm-social-facebook').value = portfolioData.contact.facebook || "";
-  renderAdminSkillsList();
-  renderAdminProjectsList();
 }
 
-
-async function saveAllChanges() {
-  portfolioData.hero.name = document.getElementById('adm-hero-name').value;
-  portfolioData.hero.role = document.getElementById('adm-hero-role').value;
-  portfolioData.hero.intro = document.getElementById('adm-hero-intro').value;
-  portfolioData.about.text = document.getElementById('adm-about-text').value;
-  portfolioData.contact.email = document.getElementById('adm-contact-email').value;
-  portfolioData.contact.github = document.getElementById('adm-social-github').value;
-  portfolioData.contact.linkedin = document.getElementById('adm-social-linkedin').value;
-  portfolioData.contact.facebook = document.getElementById('adm-social-facebook').value;
-
-
-  const newPass = document.getElementById('adm-new-pass').value.trim();
-  if (newPass) portfolioData.adminPassword = newPass;
-
-
-  try {
-    if (window.storage && typeof window.storage.set === 'function') {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(portfolioData), true);
-    } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolioData));
-    }
-    renderWebsite();
-    closeModal('admin-modal');
-    alert('All changes saved successfully!');
-  } catch (err) {
-    console.error('Failed to save portfolio data:', err);
-    alert('Could not save changes - please try again.');
-  }
+function switchTab(evt, tabId) {
+  const tabs = document.querySelectorAll('.admin-tab-content');
+  const btns = document.querySelectorAll('.admin-tab-btn');
+  tabs.forEach(t => t.classList.remove('active'));
+  btns.forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  evt.currentTarget.classList.add('active');
 }
 
-
-async function clearAllData() {
-  if (confirm('Are you sure you want to reset all portfolio data?')) {
-    portfolioData = structuredClone(emptyState);
-    try {
-      if (window.storage && typeof window.storage.set === 'function') {
-        await window.storage.set(STORAGE_KEY, JSON.stringify(portfolioData), true);
-      } else {
-        localStorage.removeItem(STORAGE_KEY);
-      }
-    } catch (err) {
-      console.error('Failed to reset stored data:', err);
-    }
-    renderWebsite();
-    closeModal('admin-modal');
-  }
-}
-
-
-window.addEventListener('load', () => {
+// Initializer
+window.addEventListener('DOMContentLoaded', () => {
   loadPortfolioData();
-  initSectionEnvironments();
-  initCustomCursor();
-  initScrollProgress();
 });
-
-
-window.addEventListener('resize', initSmokeCanvas);
 </script>
 </body>
 </html>
