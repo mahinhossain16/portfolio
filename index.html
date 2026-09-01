@@ -8,321 +8,291 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Supabase JS Library (ধাপ ২: যুক্ত করা হয়েছে) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root {
-  /* White & Ash Monochromatic Palette */
-  --bg-main: #f8fafc;
-  --bg-ash: #cbd5e1;
-  --bg-dark-ash: #94a3b8;
-  --accent-color: #475569;
-  --accent-hover: #0f172a;
-  --text-main: #0f172a;
-  --text-muted: #475569;
-
-  /* Liquid Glass (Preserved Untouched) */
-  --glass-surface: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.45);
-  --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
-  --glass-hover-bg: rgba(255, 255, 255, 0.22);
-
-  /* Victorian Style Elements */
-  --victorian-border: 1px solid rgba(15, 23, 42, 0.2);
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+/* White & Ash Monochromatic Palette */
+--bg-main: #f8fafc;
+--bg-ash: #cbd5e1;
+--bg-dark-ash: #94a3b8;
+--accent-color: #475569;
+--accent-hover: #0f172a;
+--text-main: #0f172a;
+--text-muted: #475569;
+/* Liquid Glass */
+--glass-surface: rgba(255, 255, 255, 0.12);
+--glass-border: rgba(255, 255, 255, 0.45);
+--glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+--glass-hover-bg: rgba(255, 255, 255, 0.22);
+/* Victorian Style Elements */
+--victorian-border: 1px solid rgba(15, 23, 42, 0.2);
+--radius-sm: 4px;
+--radius-md: 8px;
+--radius-lg: 12px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { 
-  scroll-behavior: smooth; 
-  font-family: 'Plus Jakarta Sans', sans-serif; 
-  background-color: var(--bg-main); 
-  color: var(--text-main); 
-}
-
+html {
+scroll-behavior: smooth;
+font-family: 'Plus Jakarta Sans', sans-serif;
+background-color: var(--bg-main);
+color: var(--text-main); }
 body {
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
-  color: var(--text-main);
-  cursor: default;
+min-height: 100vh;
+overflow-x: hidden;
+position: relative;
+background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
+color: var(--text-main);
+cursor: default;
 }
-
 /* Victorian Typography Overrides */
 h1, h2, h3, .section-title, .hero-title {
-  font-family: 'Playfair Display', serif !important;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+font-family: 'Playfair Display', serif !important;
+letter-spacing: 0.04em;
+text-transform: uppercase;
 }
-
 /* 2px Scroll Progress Bar */
 #scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 0%;
-  background: linear-gradient(90deg, #64748b, #0f172a);
-  z-index: 9999;
-  transition: width 0.1s linear;
+position: fixed;
+top: 0;
+left: 0;
+height: 2px;
+width: 0%;
+background: linear-gradient(90deg, #64748b, #0f172a);
+z-index: 9999;
+transition: width 0.1s linear;
 }
-
 /* Custom Cursor */
 .custom-cursor {
-  width: 24px;
-  height: 24px;
-  border: 1px solid rgba(15, 23, 42, 0.5);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.05s ease-out;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(2px);
+width: 24px;
+height: 24px;
+border: 1px solid rgba(15, 23, 42, 0.5);
+border-radius: 50%;
+position: fixed;
+pointer-events: none;
+z-index: 9998;
+transform: translate(-50%, -50%);
+transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.05s ease-out;
+background: rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(2px);
 }
-
 .custom-cursor-dot {
-  width: 4px;
-  height: 4px;
-  background: #0f172a;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
+width: 4px;
+height: 4px;
+background: #0f172a;
+border-radius: 50%;
+position: fixed;
+pointer-events: none;
+z-index: 9999;
+transform: translate(-50%, -50%);
 }
-
 @media (pointer: coarse) {
-  .custom-cursor, .custom-cursor-dot { display: none !important; }
+.custom-cursor, .custom-cursor-dot { display: none !important; }
 }
-
-/* Liquid Glass Styling with Victorian Accent Inner Line */
+/* Liquid Glass Styling */
 .glass-panel {
-  background: var(--glass-surface);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: var(--radius-lg);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease;
-  transform-style: preserve-3d;
-  outline: 1px solid rgba(15, 23, 42, 0.1);
-  outline-offset: -6px;
+background: var(--glass-surface);
+backdrop-filter: blur(20px) saturate(140%);
+-webkit-backdrop-filter: blur(20px) saturate(140%);
+border: 1px solid var(--glass-border);
+box-shadow: var(--glass-shadow);
+border-radius: var(--radius-lg);
+transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease;
+transform-style: preserve-3d;
+outline: 1px solid rgba(15, 23, 42, 0.1);
+outline-offset: -6px;
 }
-
-.container { 
-  max-width: 1200px; 
-  margin: 0 auto; 
-  padding: 0 1.5rem; 
-  position: relative; 
-  z-index: 5; 
-  width: 100%; 
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 1.5rem;
+position: relative;
+z-index: 5;
+width: 100%;
 }
-
-section { 
-  padding: 8rem 0; 
-  position: relative; 
-  z-index: 5; 
-  overflow: hidden; 
-  border-bottom: var(--victorian-border);
+section {
+padding: 8rem 0;
+position: relative;
+z-index: 5;
+overflow: hidden;
+border-bottom: var(--victorian-border);
 }
-
 .section-title {
-  font-size: 2.25rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-  color: var(--text-main);
+font-size: 2.25rem;
+font-weight: 800;
+margin-bottom: 0.5rem;
+color: var(--text-main);
 }
-
-.section-subtitle { 
-  font-size: 1rem; 
-  color: var(--text-muted); 
-  margin-bottom: 2.5rem; 
-  font-style: italic;
-  font-family: 'Playfair Display', serif;
+.section-subtitle {
+font-size: 1rem;
+color: var(--text-muted);
+margin-bottom: 2.5rem;
+font-style: italic;
+font-family: 'Playfair Display', serif;
 }
-
 .section-bg-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+pointer-events: none;
 }
-
-/* Navigation & Toggle Buttons */
+/* Navigation & Buttons */
 .menu-toggle-btn {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 1100;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-  color: var(--text-main);
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+position: fixed;
+top: 1.5rem;
+right: 1.5rem;
+z-index: 1100;
+width: 48px;
+height: 48px;
+border-radius: var(--radius-sm);
+background: rgba(255, 255, 255, 0.3);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 255, 255, 0.6);
+box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+color: var(--text-main);
+font-size: 1.1rem;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .menu-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: scale(1.05);
+background: rgba(255, 255, 255, 0.6);
+transform: scale(1.05);
 }
-
 .floating-admin-btn {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 1000;
-  padding: 0.7rem 1.2rem;
-  border-radius: var(--radius-sm);
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(10px);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 0.05em;
+position: fixed;
+bottom: 1.5rem;
+right: 1.5rem;
+z-index: 1000;
+padding: 0.7rem 1.2rem;
+border-radius: var(--radius-sm);
+background: rgba(15, 23, 42, 0.85);
+backdrop-filter: blur(10px);
+color: #fff;
+border: 1px solid rgba(255, 255, 255, 0.3);
+box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+font-size: 0.85rem;
+font-weight: 600;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+transition: all 0.3s ease;
+font-family: 'Playfair Display', serif;
+letter-spacing: 0.05em;
 }
-
 .floating-admin-btn:hover {
-  background: var(--text-main);
-  transform: translateY(-2px);
+background: var(--text-main);
+transform: translateY(-2px);
 }
-
 /* Sidebar Navigation */
 .right-sidebar {
-  position: fixed;
-  top: 0;
-  right: -330px;
-  width: 310px;
-  height: 100vh;
-  z-index: 1050;
-  padding: 5rem 1.75rem 2rem 1.75rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 2rem;
-  background: rgba(241, 245, 249, 0.75);
-  backdrop-filter: blur(35px) saturate(180%);
-  -webkit-backdrop-filter: blur(35px) saturate(180%);
-  border-left: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: -15px 0 45px rgba(0,0,0,0.05);
-  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-y: auto;
+position: fixed;
+top: 0;
+right: -330px;
+width: 310px;
+height: 100vh;
+z-index: 1050;
+padding: 5rem 1.75rem 2rem 1.75rem;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+gap: 2rem;
+background: rgba(241, 245, 249, 0.75);
+backdrop-filter: blur(35px) saturate(180%);
+-webkit-backdrop-filter: blur(35px) saturate(180%);
+border-left: 1px solid rgba(255, 255, 255, 0.6);
+box-shadow: -15px 0 45px rgba(0,0,0,0.05);
+transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+overflow-y: auto;
 }
-
 .right-sidebar.open { right: 0; }
-
 .sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(15, 23, 42, 0.15);
-  backdrop-filter: blur(4px);
-  z-index: 1040;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background: rgba(15, 23, 42, 0.15);
+backdrop-filter: blur(4px);
+z-index: 1040;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease;
 }
-
 .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
-
 .nav-links { display: flex; flex-direction: column; gap: 0.8rem; list-style: none; }
-
 .nav-links li {
-  opacity: 0;
-  transform: translateX(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+opacity: 0;
+transform: translateX(20px);
+transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
 .right-sidebar.open .nav-links li {
-  opacity: 1;
-  transform: translateX(0);
+opacity: 1;
+transform: translateX(0);
 }
-
 .nav-links a {
-  text-decoration: none;
-  color: var(--text-main);
-  font-size: 0.95rem;
-  font-weight: 600;
-  padding: 0.85rem 1rem;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
+text-decoration: none;
+color: var(--text-main);
+font-size: 0.95rem;
+font-weight: 600;
+padding: 0.85rem 1rem;
+border-radius: var(--radius-sm);
+background: rgba(255, 255, 255, 0.25);
+border: 1px solid rgba(255, 255, 255, 0.5);
+transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+display: flex;
+align-items: center;
+gap: 0.85rem;
 }
-
 .nav-links a:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: translateX(-4px);
+background: rgba(255, 255, 255, 0.6);
+transform: translateX(-4px);
 }
-
 .admin-btn {
-  background: var(--text-main);
-  color: #fff;
-  padding: 0.9rem 1.2rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255,255,255,0.2);
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+background: var(--text-main);
+color: #fff;
+padding: 0.9rem 1.2rem;
+border-radius: var(--radius-sm);
+border: 1px solid rgba(255,255,255,0.2);
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.6rem;
 }
-
 .admin-btn:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
+background: var(--accent-hover);
+transform: translateY(-2px);
 }
-
 /* Glass Buttons */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 0.03em;
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.75rem 1.5rem;
+border-radius: var(--radius-sm);
+font-size: 0.9rem;
+font-weight: 600;
+text-decoration: none;
+cursor: pointer;
+border: none;
+transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+font-family: 'Playfair Display', serif;
+letter-spacing: 0.03em;
 }
-
 .btn-primary { background: var(--text-main); color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
 .btn-secondary { background: rgba(255, 255, 255, 0.2); color: var(--text-main); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
@@ -330,494 +300,457 @@ section {
 .btn-danger { background: #ef4444; color: #fff; }
 .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 4px; }
 
-/* Global Smoke Reveal Canvas System Across All Pages */
+/* Smoke Canvas Layout */
 #global-reveal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  pointer-events: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+z-index: 1;
+pointer-events: none;
 }
-
 .hero-img-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: 1;
 }
-
 #smoke-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  pointer-events: auto;
-  cursor: crosshair;
-  touch-action: none;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 2;
+pointer-events: auto;
+cursor: crosshair;
+touch-action: none;
 }
-
 .hero-overlay-shade {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(203, 213, 225, 0.35) 100%);
-  z-index: 3;
-  pointer-events: none;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(203, 213, 225, 0.35) 100%);
+z-index: 3;
+pointer-events: none;
 }
-
-/* Foreground Content Wrapper */
-.content-wrapper {
-  position: relative;
-  z-index: 5;
+.content-wrapper { position: relative; z-index: 5; }
+.hero {
+position: relative;
+width: 100%;
+min-height: 100vh;
+display: flex;
+align-items: flex-end;
+justify-content: flex-start;
+padding: 3rem;
 }
-
-/* Hero Content */
-.hero { 
-  position: relative; 
-  width: 100%; 
-  min-height: 100vh; 
-  display: flex; 
-  align-items: flex-end; 
-  justify-content: flex-start; 
-  padding: 3rem; 
-}
-
 .hero-content { position: relative; z-index: 10; max-width: 540px; width: 100%; }
 .hero-card { padding: 2.5rem; }
 .hero-title { font-size: 2.75rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; color: var(--text-main); }
 .hero-role { font-size: 1.1rem; color: var(--accent-color); font-weight: 600; margin-bottom: 1rem; font-style: italic; font-family: 'Playfair Display', serif; }
 .hero-intro { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.75rem; }
 
-/* Grid Layouts & Ultra-Transparent Glass Cards */
 .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-
 .card-item {
-  padding: 2.25rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+padding: 2.25rem;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
-
 .card-item:hover {
-  background: var(--glass-hover-bg);
-  border-color: rgba(255, 255, 255, 0.6);
+background: var(--glass-hover-bg);
+border-color: rgba(255, 255, 255, 0.6);
 }
-
 .pill-wrap { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
-
 .skill-pill {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 0.4rem 0.95rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-main);
-  backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
+background: rgba(255, 255, 255, 0.2);
+border: 1px solid rgba(255, 255, 255, 0.5);
+padding: 0.4rem 0.95rem;
+border-radius: var(--radius-sm);
+font-size: 0.85rem;
+font-weight: 600;
+color: var(--text-main);
+backdrop-filter: blur(10px);
+transition: all 0.2s ease;
 }
-
 .skill-pill:hover {
-  background: rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
+background: rgba(255, 255, 255, 0.4);
+transform: translateY(-2px);
 }
-
-/* Social Glass Icons */
 .social-links { display: flex; gap: 1rem; margin-top: 1.5rem; }
-
 .social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--text-main);
-  font-size: 1.1rem;
-  text-decoration: none;
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(15px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 48px;
+height: 48px;
+border-radius: var(--radius-sm);
+background: rgba(255, 255, 255, 0.2);
+color: var(--text-main);
+font-size: 1.1rem;
+text-decoration: none;
+border: 1px solid var(--glass-border);
+backdrop-filter: blur(15px);
+transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .social-icon:hover { background: var(--text-main); color: #fff; transform: translateY(-3px); }
 
-/* Scroll Reveal Animations */
 .reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  filter: blur(8px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+opacity: 0;
+transform: translateY(30px);
+filter: blur(8px);
+transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .reveal-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+opacity: 1;
+transform: translateY(0);
+filter: blur(0);
 }
 
-/* Admin Modal */
-.modal-overlay { 
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100vw; 
-  height: 100vh; 
-  background: rgba(15, 23, 42, 0.2); 
-  backdrop-filter: blur(12px); 
-  z-index: 2000; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  opacity: 0; 
-  pointer-events: none; 
-  transition: opacity 0.3s ease; 
+/* Modals */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background: rgba(15, 23, 42, 0.2);
+backdrop-filter: blur(12px);
+z-index: 2000;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease;
 }
-
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
-
-.modal-card { 
-  width: 90%; 
-  max-width: 850px; 
-  max-height: 85vh; 
-  overflow-y: auto; 
-  padding: 2.5rem; 
-  background: rgba(248, 250, 252, 0.85); 
-  backdrop-filter: blur(30px) saturate(180%); 
-  border: 1px solid rgba(255, 255, 255, 0.8); 
-  border-radius: var(--radius-lg); 
-  color: var(--text-main); 
-  box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
+.modal-card {
+width: 90%;
+max-width: 850px;
+max-height: 85vh;
+overflow-y: auto;
+padding: 2.5rem;
+background: rgba(248, 250, 252, 0.85);
+backdrop-filter: blur(30px) saturate(180%);
+border: 1px solid rgba(255, 255, 255, 0.8);
+border-radius: var(--radius-lg);
+color: var(--text-main);
+box-shadow: 0 30px 60px rgba(0,0,0,0.1);
 }
-
-.modal-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 1.5rem; 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
-  padding-bottom: 1rem; 
+.modal-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1.5rem;
+border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+padding-bottom: 1rem;
 }
-
 .form-group { margin-bottom: 1.2rem; }
 .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
-
-.form-control { 
-  width: 100%; 
-  padding: 0.75rem 1rem; 
-  border-radius: var(--radius-sm); 
-  border: 1px solid rgba(15, 23, 42, 0.2); 
-  background: rgba(255, 255, 255, 0.5); 
-  color: var(--text-main); 
-  font-family: inherit; 
-  font-size: 0.9rem; 
-  transition: border-color 0.3s ease; 
-  backdrop-filter: blur(10px); 
+.form-control {
+width: 100%;
+padding: 0.75rem 1rem;
+border-radius: var(--radius-sm);
+border: 1px solid rgba(15, 23, 42, 0.2);
+background: rgba(255, 255, 255, 0.5);
+color: var(--text-main);
+font-family: inherit;
+font-size: 0.9rem;
+transition: border-color 0.3s ease;
+backdrop-filter: blur(10px);
 }
-
 .form-control:focus { outline: none; border-color: var(--text-main); background: rgba(255, 255, 255, 0.8); }
-
-.admin-tab-nav { 
-  display: flex; 
-  gap: 0.5rem; 
-  overflow-x: auto; 
-  margin-bottom: 1.5rem; 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
-  padding-bottom: 0.5rem; 
+.admin-tab-nav {
+display: flex;
+gap: 0.5rem;
+overflow-x: auto;
+margin-bottom: 1.5rem;
+border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+padding-bottom: 0.5rem;
 }
-
-.admin-tab-btn { 
-  padding: 0.5rem 1rem; 
-  border: none; 
-  background: none; 
-  font-size: 0.85rem; 
-  font-weight: 600; 
-  color: var(--text-muted); 
-  cursor: pointer; 
-  border-radius: 4px; 
-  transition: all 0.3s; 
-  font-family: 'Playfair Display', serif;
+.admin-tab-btn {
+padding: 0.5rem 1rem;
+border: none;
+background: none;
+font-size: 0.85rem;
+font-weight: 600;
+color: var(--text-muted);
+cursor: pointer;
+border-radius: 4px;
+transition: all 0.3s;
+font-family: 'Playfair Display', serif;
 }
-
 .admin-tab-btn.active { background: var(--text-main); color: #fff; }
 .admin-tab-content { display: none; }
 .admin-tab-content.active { display: block; }
-
-.crud-box { 
-  background: rgba(255, 255, 255, 0.3); 
-  border: 1px solid rgba(255, 255, 255, 0.6); 
-  border-radius: var(--radius-sm); 
-  padding: 1.25rem; 
-  margin-bottom: 1.5rem; 
+.crud-box {
+background: rgba(255, 255, 255, 0.3);
+border: 1px solid rgba(255, 255, 255, 0.6);
+border-radius: var(--radius-sm);
+padding: 1.25rem;
+margin-bottom: 1.5rem;
 }
-
-.crud-item { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  background: rgba(255, 255, 255, 0.4); 
-  padding: 0.8rem; 
-  border: 1px solid rgba(255, 255, 255, 0.6); 
-  border-radius: 4px; 
-  margin-bottom: 0.5rem; 
+.crud-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: rgba(255, 255, 255, 0.4);
+padding: 0.8rem;
+border: 1px solid rgba(255, 255, 255, 0.6);
+border-radius: 4px;
+margin-bottom: 0.5rem;
 }
-
 .empty-state { padding: 2rem; text-align: center; color: var(--text-muted); font-style: italic; }
-
 @media (max-width: 768px) {
-  .hero { padding: 1.5rem; }
-  .right-sidebar { width: 270px; }
-  section { padding: 5rem 0; }
+.hero { padding: 1.5rem; }
+.right-sidebar { width: 270px; }
+section { padding: 5rem 0; }
 }
 </style>
 </head>
 <body>
-
 <!-- 2px Scroll Progress Bar -->
 <div id="scroll-progress"></div>
-
 <!-- Minimal Custom Cursor -->
 <div class="custom-cursor" id="cursor-ring"></div>
 <div class="custom-cursor-dot" id="cursor-dot"></div>
 
 <!-- Menu Toggle Button -->
 <button class="menu-toggle-btn" id="menu-toggle-btn" onclick="toggleSidebar()" aria-label="Toggle Navigation">
-  <i class="fa-solid fa-bars" id="menu-icon"></i>
+<i class="fa-solid fa-bars" id="menu-icon"></i>
 </button>
 
 <!-- Permanent Bottom-Right Admin Button -->
 <button class="floating-admin-btn" onclick="openLoginModal()">
-  <i class="fa-solid fa-lock"></i> Admin Panel
-</button>
-
+<i class="fa-solid fa-lock"></i> Admin Panel
+</button> 
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <!-- Slide-Out Sidebar Navigation -->
 <aside class="right-sidebar" id="right-sidebar">
-  <div>
-    <h3 style="font-weight: 800; letter-spacing: 0.05em; margin-bottom: 1.2rem; color: var(--text-main); font-size: 0.9rem;">NAVIGATION</h3>
-    <button class="admin-btn" onclick="openLoginModal()"><i class="fa-solid fa-lock"></i> Admin Control Panel</button>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#hero" onclick="scrollToSection('hero')"><i class="fa-solid fa-house"></i> Home</a></li>
-    <li><a href="#about" onclick="scrollToSection('about')"><i class="fa-solid fa-user"></i> About</a></li>
-    <li><a href="#skills" onclick="scrollToSection('skills')"><i class="fa-solid fa-gears"></i> Skills</a></li>
-    <li><a href="#projects" onclick="scrollToSection('projects')"><i class="fa-solid fa-laptop-code"></i> Projects</a></li>
-    <li><a href="#contact" onclick="scrollToSection('contact')"><i class="fa-solid fa-envelope"></i> Contact</a></li>
-  </ul>
+<div>
+<h3 style="font-weight: 800; letter-spacing: 0.05em; margin-bottom: 1.2rem; color: var(--text-main); font-size: 0.9rem;">NAVIGATION</h3>
+<button class="admin-btn" onclick="openLoginModal()"><i class="fa-solid fa-lock"></i> Admin Control Panel</button>
+</div>
+<ul class="nav-links">
+<li><a href="#hero" onclick="scrollToSection('hero')"><i class="fa-solid fa-house"></i> Home</a></li>
+<li><a href="#about" onclick="scrollToSection('about')"><i class="fa-solid fa-user"></i> About</a></li>
+<li><a href="#skills" onclick="scrollToSection('skills')"><i class="fa-solid fa-gears"></i> Skills</a></li>
+<li><a href="#projects" onclick="scrollToSection('projects')"><i class="fa-solid fa-laptop-code"></i> Projects</a></li>
+<li><a href="#contact" onclick="scrollToSection('contact')"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+</ul>
 </aside>
 
 <!-- GLOBAL FULL-PAGE REVEAL CANVAS SYSTEM -->
 <div id="global-reveal-container">
-  <img src="" id="display-img-back" class="hero-img-back" alt="Base Layer Image">
-  <canvas id="smoke-canvas"></canvas>
-  <div class="hero-overlay-shade"></div>
+<img src="" id="display-img-back" class="hero-img-back" alt="Base Layer Image">
+<canvas id="smoke-canvas"></canvas>
+<div class="hero-overlay-shade"></div>
 </div>
 
 <!-- FOREGROUND WEBSITE CONTENT -->
 <div class="content-wrapper">
-  <main class="main-content">
-    
-    <!-- HERO SECTION -->
-    <section class="hero" id="hero">
-      <div class="hero-content">
-        <div class="hero-card glass-panel reveal-on-scroll">
-          <h1 id="display-hero-name" class="hero-title">Your Name</h1>
-          <div id="display-hero-role" class="hero-role">Your Professional Title</div>
-          <p id="display-hero-intro" class="hero-intro">Short introduction text configured inside the admin dashboard will display here.</p>
-          <div style="display: flex; gap: 1rem;">
-            <a href="#projects" onclick="scrollToSection('projects')" class="btn btn-primary">View Projects</a>
-            <a href="#contact" onclick="scrollToSection('contact')" class="btn btn-secondary">Get In Touch</a>
-          </div>
-        </div>
-      </div>
-    </section>
+<main class="main-content">
+<!-- HERO SECTION -->
+<section class="hero" id="hero">
+<div class="hero-content">
+<div class="hero-card glass-panel reveal-on-scroll">
+<h1 id="display-hero-name" class="hero-title">Your Name</h1>
+<div id="display-hero-role" class="hero-role">Your Professional Title</div>
+<p id="display-hero-intro" class="hero-intro">Short introduction text configured inside the admin dashboard will display here.</p>
+<div style="display: flex; gap: 1rem;">
+<a href="#projects" onclick="scrollToSection('projects')" class="btn btn-primary">View Projects</a>
+<a href="#contact" onclick="scrollToSection('contact')" class="btn btn-secondary">Get In Touch</a>
+</div>
+</div>
+</div>
+</section>
 
-    <!-- ABOUT SECTION -->
-    <section id="about">
-      <canvas id="canvas-about" class="section-bg-canvas"></canvas>
-      <div class="container">
-        <div class="glass-panel reveal-on-scroll" style="padding: 3.5rem;">
-          <h2 class="section-title">About Me</h2>
-          <p id="display-about-text" style="line-height: 1.8; color: var(--text-muted); font-size: 1.05rem; margin-top: 0.5rem;">No biography details configured yet.</p>
-        </div>
-      </div>
-    </section>
+<!-- ABOUT SECTION -->
+<section id="about">
+<canvas id="canvas-about" class="section-bg-canvas"></canvas>
+<div class="container">
+<div class="glass-panel reveal-on-scroll" style="padding: 3.5rem;">
+<h2 class="section-title">About Me</h2>
+<p id="display-about-text" style="line-height: 1.8; color: var(--text-muted); font-size: 1.05rem; margin-top: 0.5rem;">No biography details configured yet.</p>
+</div>
+</div>
+</section>
 
-    <!-- SKILLS SECTION -->
-    <section id="skills">
-      <canvas id="canvas-skills" class="section-bg-canvas"></canvas>
-      <div class="container">
-        <div class="reveal-on-scroll">
-          <h2 class="section-title">Skills & Expertise</h2>
-          <div class="section-subtitle">Categorized competencies and technical skill sets</div>
-        </div>
-        <div class="grid-container" id="skills-container"></div>
-      </div>
-    </section>
+<!-- SKILLS SECTION -->
+<section id="skills">
+<canvas id="canvas-skills" class="section-bg-canvas"></canvas>
+<div class="container">
+<div class="reveal-on-scroll">
+<h2 class="section-title">Skills & Expertise</h2>
+<div class="section-subtitle">Categorized competencies and technical skill sets</div>
+</div>
+<div class="grid-container" id="skills-container"></div>
+</div>
+</section>
 
-    <!-- PROJECTS SECTION -->
-    <section id="projects">
-      <canvas id="canvas-projects" class="section-bg-canvas"></canvas>
-      <div class="container">
-        <div class="reveal-on-scroll">
-          <h2 class="section-title">Featured Projects</h2>
-          <div class="section-subtitle">Showcase of builds, repositories, and applications</div>
-        </div>
-        <div class="grid-container" id="projects-container"></div>
-      </div>
-    </section>
+<!-- PROJECTS SECTION -->
+<section id="projects">
+<canvas id="canvas-projects" class="section-bg-canvas"></canvas>
+<div class="container">
+<div class="reveal-on-scroll">
+<h2 class="section-title">Featured Projects</h2>
+<div class="section-subtitle">Showcase of builds, repositories, and applications</div>
+</div>
+<div class="grid-container" id="projects-container"></div>
+</div>
+</section>
 
-    <!-- CONTACT SECTION -->
-    <section id="contact">
-      <canvas id="canvas-contact" class="section-bg-canvas"></canvas>
-      <div class="container">
-        <div class="glass-panel reveal-on-scroll" style="padding: 3.5rem;">
-          <h2 class="section-title">Contact & Socials</h2>
-          <p style="margin-top: 1rem; font-size: 1.1rem; color: var(--text-muted);">Direct Email: 
-            <strong id="display-contact-email" style="color:var(--text-main);">Not configured</strong>
-          </p>
-          <div class="social-links" id="display-social-links"></div>
-        </div>
-      </div>
-    </section>
+<!-- CONTACT SECTION -->
+<section id="contact">
+<canvas id="canvas-contact" class="section-bg-canvas"></canvas>
+<div class="container">
+<div class="glass-panel reveal-on-scroll" style="padding: 3.5rem;">
+<h2 class="section-title">Contact & Socials</h2>
+<p style="margin-top: 1rem; font-size: 1.1rem; color: var(--text-muted);">Direct Email:
+<strong id="display-contact-email" style="color:var(--text-main);">Not configured</strong>
+</p>
+<div class="social-links" id="display-social-links"></div>
+</div>
+</div>
+</section>
+</main>
 
-  </main>
-
-  <!-- FOOTER SECTION -->
-  <footer style="position: relative; padding: 4rem 0 3rem 0; overflow: hidden; background: transparent;">
-    <canvas id="canvas-footer" class="section-bg-canvas"></canvas>
-    <div class="container" style="text-align: center; position: relative; z-index: 5;">
-      <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">&copy; <span id="footer-year"></span> All Rights Reserved.</p>
-    </div>
-  </footer>
+<!-- FOOTER SECTION -->
+<footer style="position: relative; padding: 4rem 0 3rem 0; overflow: hidden; background: transparent;">
+<canvas id="canvas-footer" class="section-bg-canvas"></canvas>
+<div class="container" style="text-align: center; position: relative; z-index: 5;">
+<p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">&copy; <span id="footer-year"></span> All Rights Reserved.</p>
+</div>
+</footer>
 </div>
 
-<!-- LOGIN MODAL -->
+<!-- LOGIN MODAL (Supabase Auth Email/Password Updated) -->
 <div class="modal-overlay" id="login-modal">
-  <div class="modal-card" style="max-width: 400px;">
-    <div class="modal-header">
-      <h3>Admin Access</h3>
-      <span style="cursor:pointer;" onclick="closeModal('login-modal')"><i class="fa-solid fa-xmark"></i></span>
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="admin-pass-input" class="form-control" placeholder="Default: admin">
-    </div>
-    <p id="login-error" style="color:#ef4444; font-size:0.85rem; display:none; margin-bottom: 1rem;">Invalid password.</p>
-    <button class="btn btn-primary" onclick="verifyAdminPassword()" style="width:100%; justify-content:center;">Log In</button>
-  </div>
+<div class="modal-card" style="max-width: 400px;">
+<div class="modal-header">
+<h3>Admin Access</h3>
+<span style="cursor:pointer;" onclick="closeModal('login-modal')"><i class="fa-solid fa-xmark"></i></span>
+</div>
+<div class="form-group">
+<label>Email Address</label>
+<input type="email" id="admin-email-input" class="form-control" placeholder="Enter Supabase Admin Email">
+</div>
+<div class="form-group">
+<label>Password</label>
+<input type="password" id="admin-pass-input" class="form-control" placeholder="Enter Supabase Password">
+</div>
+<p id="login-error" style="color:#ef4444; font-size:0.85rem; display:none; margin-bottom: 1rem;">Invalid Email or Password.</p>
+<button class="btn btn-primary" onclick="verifyAdminPassword()" style="width: 100%; justify-content:center;">Log In</button>
+</div>
 </div>
 
 <!-- ADMIN CONTROL PANEL MODAL -->
 <div class="modal-overlay" id="admin-modal">
-  <div class="modal-card">
-    <div class="modal-header">
-      <h3>Portfolio Control Dashboard</h3>
-      <span style="cursor:pointer;" onclick="closeModal('admin-modal')"><i class="fa-solid fa-xmark"></i></span>
-    </div>
+<div class="modal-card">
+<div class="modal-header">
+<h3>Portfolio Control Dashboard</h3>
+<span style="cursor:pointer;" onclick="closeModal('admin-modal')"><i class="fa-solid fa-xmark"></i></span>
+</div>
+<div class="admin-tab-nav">
+<button class="admin-tab-btn active" onclick="switchTab(event, 'tab-hero')">Hero & Fullscreen Photos</button>
+<button class="admin-tab-btn" onclick="switchTab(event, 'tab-about')">About</button>
+<button class="admin-tab-btn" onclick="switchTab(event, 'tab-skills')">Skills CRUD</button>
+<button class="admin-tab-btn" onclick="switchTab(event, 'tab-projects')">Projects CRUD</button>
+<button class="admin-tab-btn" onclick="switchTab(event, 'tab-contact')">Contact & Links</button>
+</div>
 
-    <div class="admin-tab-nav">
-      <button class="admin-tab-btn active" onclick="switchTab(event, 'tab-hero')">Hero & Fullscreen Photos</button>
-      <button class="admin-tab-btn" onclick="switchTab(event, 'tab-about')">About</button>
-      <button class="admin-tab-btn" onclick="switchTab(event, 'tab-skills')">Skills CRUD</button>
-      <button class="admin-tab-btn" onclick="switchTab(event, 'tab-projects')">Projects CRUD</button>
-      <button class="admin-tab-btn" onclick="switchTab(event, 'tab-contact')">Contact & Links</button>
-      <button class="admin-tab-btn" onclick="switchTab(event, 'tab-security')">Security</button>
-    </div>
+<div class="admin-tab-content active" id="tab-hero">
+<div class="form-group"><label>Name</label><input type="text" id="adm-hero-name" class="form-control"></div>
+<div class="form-group"><label>Role / Professional Title</label><input type="text" id="adm-hero-role" class="form-control"></div>
+<div class="form-group"><label>Hero Introduction</label><textarea id="adm-hero-intro" class="form-control" rows="3"></textarea></div>
+<div class="form-group">
+<label>Top Cover Layer Image File (Forward Surface Image)</label>
+<input type="file" class="form-control" accept="image/*" onchange="uploadHeroImage(event, 'imgFront')">
+</div>
+<div class="form-group">
+<label>Bottom Base Layer Image File (Backward Revealed Image)</label>
+<input type="file" class="form-control" accept="image/*" onchange="uploadHeroImage(event, 'imgBack')">
+</div>
+</div>
 
-    <div class="admin-tab-content active" id="tab-hero">
-      <div class="form-group"><label>Name</label><input type="text" id="adm-hero-name" class="form-control"></div>
-      <div class="form-group"><label>Role / Professional Title</label><input type="text" id="adm-hero-role" class="form-control"></div>
-      <div class="form-group"><label>Hero Introduction</label><textarea id="adm-hero-intro" class="form-control" rows="3"></textarea></div>
-      <div class="form-group">
-        <label>Top Cover Layer Image File (Forward Surface Image)</label>
-        <input type="file" class="form-control" accept="image/*" onchange="uploadHeroImage(event, 'imgFront')">
-      </div>
-      <div class="form-group">
-        <label>Bottom Base Layer Image File (Backward Revealed Image)</label>
-        <input type="file" class="form-control" accept="image/*" onchange="uploadHeroImage(event, 'imgBack')">
-      </div>
-    </div>
+<div class="admin-tab-content" id="tab-about">
+<div class="form-group"><label>Biography Paragraphs</label><textarea id="adm-about-text" class="form-control" rows="5"></textarea></div>
+</div>
 
-    <div class="admin-tab-content" id="tab-about">
-      <div class="form-group"><label>Biography Paragraphs</label><textarea id="adm-about-text" class="form-control" rows="5"></textarea></div>
-    </div>
+<div class="admin-tab-content" id="tab-skills">
+<div class="crud-box">
+<h4 id="skill-form-title">Add New Skill Category</h4>
+<input type="hidden" id="edit-skill-cat-index" value="-1">
+<div class="form-group" style="margin-top:0.8rem;">
+<label>Category Name</label>
+<input type="text" id="skill-cat-input" class="form-control" placeholder="e.g., Languages & Frameworks">
+</div>
+<div class="form-group">
+<label>Add Skill Item</label>
+<div style="display: flex; gap:0.5rem;">
+<input type="text" id="skill-item-input" class="form-control" placeholder="e.g., Python">
+<button class="btn btn-secondary btn-sm" onclick="addSkillItemToTempList()">Add Item</button>
+</div>
+</div>
+<div style="margin-bottom: 1rem;">
+<label style="font-size:0.8rem; font-weight:600;">Pending Skills:</label>
+<div id="temp-skill-items-container" class="pill-wrap"></div>
+</div>
+<div style="display: flex; gap:0.5rem;">
+<button class="btn btn-primary" onclick="saveSkillCategory()">Save Category</button>
+<button class="btn btn-secondary" id="cancel-skill-edit-btn" style="display:none;" onclick="resetSkillCategoryForm()">Cancel</button>
+</div>
+</div>
+<h4>Existing Categories</h4>
+<div id="adm-skills-list" style="margin-top: 0.8rem;"></div>
+</div>
 
-    <div class="admin-tab-content" id="tab-skills">
-      <div class="crud-box">
-        <h4 id="skill-form-title">Add New Skill Category</h4>
-        <input type="hidden" id="edit-skill-cat-index" value="-1">
-        <div class="form-group" style="margin-top:0.8rem;">
-          <label>Category Name</label>
-          <input type="text" id="skill-cat-input" class="form-control" placeholder="e.g., Languages & Frameworks">
-        </div>
-        <div class="form-group">
-          <label>Add Skill Item</label>
-          <div style="display: flex; gap:0.5rem;">
-            <input type="text" id="skill-item-input" class="form-control" placeholder="e.g., Python">
-            <button class="btn btn-secondary btn-sm" onclick="addSkillItemToTempList()">Add Item</button>
-          </div>
-        </div>
-        <div style="margin-bottom: 1rem;">
-          <label style="font-size:0.8rem; font-weight:600;">Pending Skills:</label>
-          <div id="temp-skill-items-container" class="pill-wrap"></div>
-        </div>
-        <div style="display: flex; gap:0.5rem;">
-          <button class="btn btn-primary" onclick="saveSkillCategory()">Save Category</button>
-          <button class="btn btn-secondary" id="cancel-skill-edit-btn" style="display:none;" onclick="resetSkillCategoryForm()">Cancel</button>
-        </div>
-      </div>
-      <h4>Existing Categories</h4>
-      <div id="adm-skills-list" style="margin-top: 0.8rem;"></div>
-    </div>
+<div class="admin-tab-content" id="tab-projects">
+<div class="crud-box">
+<h4 id="project-form-title">Add / Edit Project</h4>
+<input type="hidden" id="edit-proj-index" value="-1">
+<div class="form-group" style="margin-top:0.8rem;"><label>Project Title</label><input type="text" id="proj-title-input" class="form-control"></div>
+<div class="form-group"><label>Description</label><textarea id="proj-desc-input" class="form-control" rows="2"></textarea></div>
+<div class="form-group"><label>GitHub / Code Link</label><input type="text" id="proj-link-input" class="form-control" placeholder="https://github.com/username/project"></div>
+<div class="form-group"><label>Project File Image</label><input type="file" id="proj-file-input" class="form-control" accept="image/*" onchange="uploadProjectImage(event)"></div>
+<div style="display: flex; gap:0.5rem;">
+<button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+<button class="btn btn-secondary" id="cancel-proj-edit-btn" style="display:none;" onclick="resetProjectForm()">Cancel</button>
+</div>
+</div>
+<h4>Existing Projects</h4>
+<div id="adm-projects-list" style="margin-top: 0.8rem;"></div>
+</div>
 
-    <div class="admin-tab-content" id="tab-projects">
-      <div class="crud-box">
-        <h4 id="project-form-title">Add / Edit Project</h4>
-        <input type="hidden" id="edit-proj-index" value="-1">
-        <div class="form-group" style="margin-top:0.8rem;"><label>Project Title</label><input type="text" id="proj-title-input" class="form-control"></div>
-        <div class="form-group"><label>Description</label><textarea id="proj-desc-input" class="form-control" rows="2"></textarea></div>
-        <div class="form-group"><label>GitHub / Code Link</label><input type="text" id="proj-link-input" class="form-control" placeholder="https://github.com/username/project"></div>
-        <div class="form-group"><label>Project File Image</label><input type="file" id="proj-file-input" class="form-control" accept="image/*" onchange="uploadProjectImage(event)"></div>
-        <div style="display: flex; gap:0.5rem;">
-          <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
-          <button class="btn btn-secondary" id="cancel-proj-edit-btn" style="display:none;" onclick="resetProjectForm()">Cancel</button>
-        </div>
-      </div>
-      <h4>Existing Projects</h4>
-      <div id="adm-projects-list" style="margin-top: 0.8rem;"></div>
-    </div>
+<div class="admin-tab-content" id="tab-contact">
+<div class="form-group"><label>Email Address</label><input type="text" id="adm-contact-email" class="form-control"></div>
+<div class="form-group"><label>GitHub Account Link</label><input type="text" id="adm-social-github" class="form-control" placeholder="https://github.com/yourusername"></div>
+<div class="form-group"><label>LinkedIn ID Link</label><input type="text" id="adm-social-linkedin" class="form-control" placeholder="https://linkedin.com/in/yourusername"></div>
+<div class="form-group"><label>Facebook ID Link</label><input type="text" id="adm-social-facebook" class="form-control" placeholder="https://facebook.com/yourusername"></div>
+</div>
 
-    <div class="admin-tab-content" id="tab-contact">
-      <div class="form-group"><label>Email Address</label><input type="text" id="adm-contact-email" class="form-control"></div>
-      <div class="form-group"><label>GitHub Account Link</label><input type="text" id="adm-social-github" class="form-control" placeholder="https://github.com/yourusername"></div>
-      <div class="form-group"><label>LinkedIn ID Link</label><input type="text" id="adm-social-linkedin" class="form-control" placeholder="https://linkedin.com/in/yourusername"></div>
-      <div class="form-group"><label>Facebook ID Link</label><input type="text" id="adm-social-facebook" class="form-control" placeholder="https://facebook.com/yourusername"></div>
-    </div>
-
-    <div class="admin-tab-content" id="tab-security">
-      <div class="form-group"><label>New Password</label><input type="password" id="adm-new-pass" class="form-control" placeholder="Leave empty to keep existing password"></div>
-    </div>
-
-    <div style="margin-top: 2rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem; display: flex; justify-content: space-between;">
-      <button class="btn btn-danger btn-sm" onclick="clearAllData()">Reset All Data</button>
-      <button class="btn btn-primary" onclick="saveAllChanges()">Save Changes</button>
-    </div>
-  </div>
+<div style="margin-top: 2rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem; display: flex; justify-content: space-between;">
+<button class="btn btn-danger btn-sm" onclick="clearAllData()">Reset All Data</button>
+<button class="btn btn-primary" onclick="saveAllChanges()">Save Changes to Supabase</button>
+</div>
+</div>
 </div>
 
 <script>
+// ১. SUPABASE CLIENT INITIALIZATION (ধাপ ২ ও ৩)
+const SUPABASE_URL = 'https://zzwtfuxiutsqrkveccrx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6d3RmdXhpdXRzcXJrdmVjY3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyNzk2MTEsImV4cCI6MjEwMzg1NTYxMX0.aWkRgT62Htz1MsQ4Dl8QbSk11yzvzgNwFODZFenknPw';
+
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 document.getElementById('footer-year').innerText = new Date().getFullYear();
 
 function toggleSidebar() {
@@ -853,7 +786,6 @@ function scrollToSection(id) {
 }
 
 const emptyState = {
-  adminPassword: "admin",
   hero: { name: "", role: "", intro: "", imgFront: "", imgBack: "" },
   about: { text: "" },
   skills: [],
@@ -864,21 +796,25 @@ const emptyState = {
 let portfolioData = structuredClone(emptyState);
 let tempSkillItems = [];
 let tempProjectImage = "";
-const STORAGE_KEY = 'portfolioData_pro_v1';
 
+// ৩. SUPABASE DATABASE FETCH FUNCTION
 async function loadPortfolioData() {
   try {
-    if (window.storage && typeof window.storage.get === 'function') {
-      const result = await window.storage.get(STORAGE_KEY, true);
-      if (result && result.value) portfolioData = JSON.parse(result.value);
-    } else {
-      const local = localStorage.getItem(STORAGE_KEY);
-      if (local) portfolioData = JSON.parse(local);
+    const { data, error } = await _supabase
+      .from('portfolio_data')
+      .select('data')
+      .eq('id', 1)
+      .maybeSingle();
+
+    if (error) console.error("Supabase Load Error:", error);
+    if (data && data.data) {
+      portfolioData = data.data;
     }
   } catch (err) {
     console.log('Using default data configuration:', err);
+  } finally {
+    renderWebsite();
   }
-  renderWebsite();
 }
 
 function renderWebsite() {
@@ -895,9 +831,8 @@ function renderWebsite() {
   }
   
   initSmokeCanvas();
-
   document.getElementById('display-about-text').innerText = portfolioData.about.text || "No biography details added yet.";
-
+  
   const skillsContainer = document.getElementById('skills-container');
   skillsContainer.innerHTML = '';
   if (!portfolioData.skills || portfolioData.skills.length === 0) {
@@ -926,7 +861,7 @@ function renderWebsite() {
       card.style.transitionDelay = `${i * 0.1}s`;
       card.innerHTML = `
         <div>
-          ${p.image ? `<div style="overflow:hidden; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.4);"><img src="${p.image}" style="width:100%; height: 190px; object-fit:cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"></div>` : ''}
+          ${p.image ? `<div style="overflow:hidden; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.4);"><img src="${p.image}" style="width: 100%; height: 190px; object-fit:cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"></div>` : ''}
           <h3 style="font-size:1.35rem;">${p.title}</h3>
           <p style="color:var(--text-muted); font-size:0.95rem; margin-top:0.6rem; line-height:1.6;">${p.desc}</p>
         </div>
@@ -953,25 +888,22 @@ function renderWebsite() {
   initTiltEffect();
 }
 
-/* FULL-PAGE SMOKE REVEAL CANVAS CONTROLLER */
+/* SMOKE CANVAS EFFECTS */
 let smokeParticles = [];
 let animationFrameId = null;
 
 function initSmokeCanvas() {
   const canvas = document.getElementById('smoke-canvas');
   if (!canvas) return;
-
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   if (!portfolioData.hero.imgFront) return;
 
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = portfolioData.hero.imgFront;
-
   img.onload = () => {
     ctx.globalCompositeOperation = 'source-over';
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -992,28 +924,23 @@ function initSmokeCanvas() {
 
   function animateSmoke() {
     if (!portfolioData.hero.imgFront) return;
-
     ctx.globalCompositeOperation = 'source-over';
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = 'destination-out';
-
     for (let i = smokeParticles.length - 1; i >= 0; i--) {
       let p = smokeParticles[i];
       p.x += p.vx;
       p.y += p.vy;
       p.size += 0.5;
       p.opacity -= 0.015;
-
       if (p.opacity <= 0) {
         smokeParticles.splice(i, 1);
         continue;
       }
-
       let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
       gradient.addColorStop(0, `rgba(0, 0, 0, ${p.opacity})`);
       gradient.addColorStop(0.6, `rgba(0, 0, 0, ${p.opacity * 0.5})`);
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -1030,12 +957,10 @@ function initSmokeCanvas() {
 
   window.onmousemove = handleMove;
   window.ontouchmove = handleMove;
-
   if (animationFrameId) cancelAnimationFrame(animationFrameId);
   animateSmoke();
 }
 
-/* 3D ATMOSPHERIC SECTION BACKGROUNDS */
 function initSectionEnvironments() {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) return;
@@ -1045,20 +970,17 @@ function initSectionEnvironments() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let angle = 0;
-
     function resize() {
       canvas.width = canvas.parentElement.clientWidth;
       canvas.height = canvas.parentElement.clientHeight;
     }
     resize();
     window.addEventListener('resize', resize);
-
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const cx = canvas.width * 0.8;
       const cy = canvas.height * 0.5;
       angle += 0.003;
-
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(angle);
@@ -1068,16 +990,6 @@ function initSectionEnvironments() {
       ctx.lineWidth = 1;
       ctx.stroke();
       ctx.restore();
-
-      let grad = ctx.createRadialGradient(cx - 30, cy - 30, 10, cx, cy, 140);
-      grad.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-      grad.addColorStop(0.7, 'rgba(203, 213, 225, 0.15)');
-      grad.addColorStop(1, 'rgba(148, 163, 184, 0.02)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 140, 0, Math.PI * 2);
-      ctx.fill();
-
       requestAnimationFrame(draw);
     }
     draw();
@@ -1088,7 +1000,6 @@ function initSectionEnvironments() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let nodes = [];
-
     function resize() {
       canvas.width = canvas.parentElement.clientWidth;
       canvas.height = canvas.parentElement.clientHeight;
@@ -1106,144 +1017,28 @@ function initSectionEnvironments() {
     }
     resize();
     window.addEventListener('resize', resize);
-
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgba(15, 23, 42, 0.2)';
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-
       nodes.forEach((n, i) => {
         n.x += n.vx;
         n.y += n.vy;
         if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
         if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
         ctx.fill();
-
-        for (let j = i + 1; j < nodes.length; j++) {
-          let n2 = nodes[j];
-          let dist = Math.hypot(n.x - n2.x, n.y - n2.y);
-          if (dist < 130) {
-            ctx.beginPath();
-            ctx.moveTo(n.x, n.y);
-            ctx.lineTo(n2.x, n2.y);
-            ctx.lineWidth = (1 - dist / 130) * 0.8;
-            ctx.stroke();
-          }
-        }
       });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-  (function initProjectsBG() {
-    const canvas = document.getElementById('canvas-projects');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let offset = 0;
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1;
-      offset += 0.2;
-      const gridSize = 60;
-
-      for (let x = 0; x < canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-      for (let y = (offset % gridSize); y < canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-  (function initContactBG() {
-    const canvas = document.getElementById('canvas-contact');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let t = 0;
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t += 0.01;
-      const cx = canvas.width * 0.2 + Math.sin(t) * 20;
-      const cy = canvas.height * 0.5 + Math.cos(t) * 20;
-
-      let grad = ctx.createRadialGradient(cx, cy, 20, cx, cy, 220);
-      grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 220, 0, Math.PI * 2);
-      ctx.fill();
-
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
-
-  (function initFooterBG() {
-    const canvas = document.getElementById('canvas-footer');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let rot = 0;
-
-    function resize() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      rot += 0.005;
-
-      ctx.save();
-      ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
-      ctx.rotate(rot);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-      ctx.strokeRect(-50, -50, 100, 100);
-      ctx.restore();
-
       requestAnimationFrame(draw);
     }
     draw();
   })();
 }
 
-/* INTERACTION EFFICIENCY & OBSERVERS */
 function initTiltEffect() {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) return;
-
   const cards = document.querySelectorAll('.glass-panel');
   cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -1254,10 +1049,8 @@ function initTiltEffect() {
       const cy = rect.height / 2;
       const rotX = ((y - cy) / cy) * -4;
       const rotY = ((x - cx) / cx) * 4;
-
       card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-2px)`;
     });
-
     card.addEventListener('mouseleave', () => {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
     });
@@ -1268,7 +1061,6 @@ function initCustomCursor() {
   const ring = document.getElementById('cursor-ring');
   const dot = document.getElementById('cursor-dot');
   if (!ring || !dot) return;
-
   window.addEventListener('mousemove', (e) => {
     dot.style.left = `${e.clientX}px`;
     dot.style.top = `${e.clientY}px`;
@@ -1298,11 +1090,10 @@ function initObserver() {
       }
     });
   }, { threshold: 0.1 });
-
   document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 }
 
-/* ADMIN PANEL CONTROLS & CRUD */
+/* ADMIN PANEL FUNCTIONALITIES & CRUD */
 function addSkillItemToTempList() {
   const input = document.getElementById('skill-item-input');
   const val = input.value.trim();
@@ -1329,17 +1120,13 @@ function renderTempSkillItems() {
 function saveSkillCategory() {
   const catName = document.getElementById('skill-cat-input').value.trim();
   const editIndex = parseInt(document.getElementById('edit-skill-cat-index').value);
-
   if (!catName) { alert('Category name is required.'); return; }
-
   const categoryData = { category: catName, items: [...tempSkillItems] };
-
   if (editIndex === -1) {
     portfolioData.skills.push(categoryData);
   } else {
     portfolioData.skills[editIndex] = categoryData;
   }
-
   resetSkillCategoryForm();
   renderAdminSkillsList();
 }
@@ -1386,8 +1173,7 @@ function renderAdminSkillsList() {
           <button class="btn btn-secondary btn-sm" onclick="editSkillCategory(${idx})">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="deleteSkillCategory(${idx})">Delete</button>
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
@@ -1405,22 +1191,18 @@ function saveProject() {
   const desc = document.getElementById('proj-desc-input').value.trim();
   const link = document.getElementById('proj-link-input').value.trim();
   const editIndex = parseInt(document.getElementById('edit-proj-index').value);
-
   if (!title) { alert('Project title required.'); return; }
-
   const projData = {
     title: title,
     desc: desc,
     link: link,
     image: tempProjectImage || (editIndex !== -1 ? portfolioData.projects[editIndex].image : "")
   };
-
   if (editIndex === -1) {
     portfolioData.projects.push(projData);
   } else {
     portfolioData.projects[editIndex] = projData;
   }
-
   resetProjectForm();
   renderAdminProjectsList();
 }
@@ -1467,8 +1249,7 @@ function renderAdminProjectsList() {
           <button class="btn btn-secondary btn-sm" onclick="editProject(${idx})">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="deleteProject(${idx})">Delete</button>
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
@@ -1483,14 +1264,29 @@ function uploadHeroImage(e, targetKey) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-function verifyAdminPassword() {
-  const input = document.getElementById('admin-pass-input').value;
-  if (input === portfolioData.adminPassword) {
+// ৩. SUPABASE AUTH VERIFICATION FUNCTION
+async function verifyAdminPassword() {
+  const email = document.getElementById('admin-email-input').value.trim();
+  const password = document.getElementById('admin-pass-input').value;
+
+  if (!email || !password) {
+    alert("Please fill in both Email and Password.");
+    return;
+  }
+
+  const { data, error } = await _supabase.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-error').innerText = error.message;
+  } else {
+    document.getElementById('login-error').style.display = 'none';
     closeModal('login-modal');
     document.getElementById('admin-modal').classList.add('open');
     populateAdminFields();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
   }
 }
 
@@ -1514,6 +1310,7 @@ function populateAdminFields() {
   renderAdminProjectsList();
 }
 
+// ৩. SUPABASE DATABASE SAVE FUNCTION
 async function saveAllChanges() {
   portfolioData.hero.name = document.getElementById('adm-hero-name').value;
   portfolioData.hero.role = document.getElementById('adm-hero-role').value;
@@ -1524,21 +1321,19 @@ async function saveAllChanges() {
   portfolioData.contact.linkedin = document.getElementById('adm-social-linkedin').value;
   portfolioData.contact.facebook = document.getElementById('adm-social-facebook').value;
 
-  const newPass = document.getElementById('adm-new-pass').value.trim();
-  if (newPass) portfolioData.adminPassword = newPass;
-
   try {
-    if (window.storage && typeof window.storage.set === 'function') {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(portfolioData), true);
-    } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolioData));
-    }
+    const { error } = await _supabase
+      .from('portfolio_data')
+      .upsert({ id: 1, data: portfolioData });
+
+    if (error) throw error;
+
     renderWebsite();
     closeModal('admin-modal');
-    alert('All changes saved successfully!');
+    alert('All changes saved to Supabase database successfully!');
   } catch (err) {
     console.error('Failed to save portfolio data:', err);
-    alert('Could not save changes - please try again.');
+    alert('Could not save to Supabase database: ' + err.message);
   }
 }
 
@@ -1546,11 +1341,7 @@ async function clearAllData() {
   if (confirm('Are you sure you want to reset all portfolio data?')) {
     portfolioData = structuredClone(emptyState);
     try {
-      if (window.storage && typeof window.storage.set === 'function') {
-        await window.storage.set(STORAGE_KEY, JSON.stringify(portfolioData), true);
-      } else {
-        localStorage.removeItem(STORAGE_KEY);
-      }
+      await _supabase.from('portfolio_data').delete().eq('id', 1);
     } catch (err) {
       console.error('Failed to reset stored data:', err);
     }
@@ -1570,4 +1361,3 @@ window.addEventListener('resize', initSmokeCanvas);
 </script>
 </body>
 </html>
-
